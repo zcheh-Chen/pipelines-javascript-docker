@@ -29,9 +29,9 @@ ENV MKL_VERSION 2018.0.3
 RUN conda install -y mkl=${MKL_VERSION} -c intel --no-update-deps && \
     conda clean -ay
 
-# https://download.open-mpi.org/nightly/open-mpi/master/openmpi-master-201909240242-ee3564a.tar.gz
+
 # Open-MPI installation
-# ENV OPENMPI_VERSION 3.1.2
+ENV OPENMPI_VERSION 3.1.2
 RUN apt-get update && apt-get install -y --no-install-recommends build-essential && apt-get clean && \
     apt-get install -y \
             bzip2 \
@@ -39,9 +39,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends build-essential
             && \
     mkdir /tmp/openmpi && \
     cd /tmp/openmpi && \
-    wget https://download.open-mpi.org/nightly/open-mpi/master/openmpi-master-201909240242-ee3564a.tar.gz && \
-    tar zxf openmpi-master-201909240242-ee3564a.tar.gz && \
-    cd openmpi-master-201909240242-ee3564a && \
+    wget https://download.open-mpi.org/release/open-mpi/v3.1/openmpi-${OPENMPI_VERSION}.tar.gz && \
+    tar zxf openmpi-${OPENMPI_VERSION}.tar.gz && \
+    cd openmpi-${OPENMPI_VERSION} && \
     ./configure --enable-orterun-prefix-by-default && \
     make -j $(nproc) all && \
     make install && \
@@ -56,9 +56,8 @@ RUN apt-get update -y && \
         bzip2 \
         wget \
         && \
-        wget https://github.com/Kitware/CMake/releases/download/v3.15.2/cmake-3.15.2-Linux-x86_64.sh && \
-        bash cmake-3.15.2-Linux-x86_64.sh --skip-license --prefix=/usr && \
-	rm cmake-3.15.2-Linux-x86_64.sh
+        wget https://github.com/Kitware/CMake/releases/download/v3.13.1/cmake-3.13.1.tar.gz && \
+        tar -xvzf cmake-3.13.1.tar.gz && cd cmake-3.13.1 && ls && ./bootstrap && make && make install
 
 RUN apt-get update -y && \
     apt-get install -y \
